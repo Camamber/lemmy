@@ -18,6 +18,7 @@ RUN npm run build
 
 FROM ubuntu:latest
 
+RUN apt install curl
 RUN curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
 RUN bash nodesource_setup.sh
 RUN apt install nodejs
