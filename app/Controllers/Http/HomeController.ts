@@ -9,34 +9,42 @@ export default class HomeController {
   }
 
   public async store({ view, request }: HttpContextContract) {
-    const text = request.input('text')
-    const mystem = new Mystem()
-    let lines: Array<any> = []
-    for (const line of text.split('\n')) {
-      const lems: string[] = await mystem.lemmatize(line)
-      lines.push(lems)
+    const text: string = request.input('text', '')
+    if (!text) {
+      return view.render('index')
     }
+    let lines: any[] = text.trim().split('\n')
 
-    console.log(lines)
+    const mystem = new Mystem()
+    console.time('a')
+    for (let i = 0; i < lines.length; i += 20) {
+      const chunk = lines.slice(i, i + 20)
+      const lems: string[][] = await Promise.all(chunk.map((line) => mystem.lemmatize(line.trim())))
+
+      lems.forEach((lem, index) => (lines[i + index] = lem))
+    }
+    console.timeEnd('a')
 
     const stopword = new Stopword()
     lines = lines.map((lems) => {
       return stopword.removeStopwords(lems, 'ru')
     })
 
-    console.log(lines)
-
     const ngram = new Ngram()
     lines = lines.map((prepared) => {
       return ngram.bigrams(prepared)
     })
 
-    console.log(lines)
-
     let count = 0
     const frequency = {}
     for (const line of lines) {
+      if (!line.length) {
+        continue
+      }
       for (const bigram of line) {
+        if (!bigram.length) {
+          continue
+        }
         count++
         const key = bigram.sort().join('_')
         if (frequency[key]) {
@@ -50,11 +58,10 @@ export default class HomeController {
       }
     }
 
-    let items = Object.values(frequency)
+    const items = Object.values(frequency)
       .filter((item: any) => item.value > 1)
       .sort((a: any, b: any) => b.value - a.value)
 
-    console.log(items)
     return view.render('index', { items, text, count })
   }
 }
