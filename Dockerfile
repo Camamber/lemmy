@@ -1,4 +1,3 @@
-ARG FRONTEND_NODE_VERSION
 FROM node:lts as build
 
 WORKDIR /app
@@ -11,14 +10,16 @@ COPY . .
 
 RUN npm run build
 
-CMD ["ls", "-al"]
 
-# FROM node:lts-alpine
+FROM node:lts-alpine
 
-# WORKDIR /app
+WORKDIR /app
 
-# COPY --from=build /app/build ./
+COPY --from=build /app/build ./
+COPY --from=build /app/.env ./
 
-# RUN npm ci --production
+RUN npm ci --production
 
-# CMD ["npm", "start"]
+RUN npm install pino-pretty
+
+CMD ["npm", "start"]
