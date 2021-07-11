@@ -23,7 +23,7 @@ export class Mystem {
       })
 
       mystem.stdout.on('end', function () {
-        resolve(chunks.toString().trim().split(/\r\n/g))
+        resolve(chunks.toString().trim().split(/\n/g))
       })
 
       mystem.stdin.end(text)
