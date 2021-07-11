@@ -1,4 +1,7 @@
-FROM node:alpine
+ARG FRONTEND_NODE_VERSION
+FROM node:lts as build
+
+WORKDIR /app
 
 COPY package*.json ./
 
@@ -8,6 +11,14 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 8080
+CMD ["ls", "-al"]
 
-CMD [ "npm", "start" ]
+# FROM node:lts-alpine
+
+# WORKDIR /app
+
+# COPY --from=build /app/build ./
+
+# RUN npm ci --production
+
+# CMD ["npm", "start"]

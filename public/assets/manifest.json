@@ -1,7 +1,7 @@
 {
-  "assets/app.css": "http://localhost:53362/assets/app.css",
-  "assets/app.js": "http://localhost:53362/assets/app.js",
-  "assets/fonts/SFProDisplay-Semibold.woff2": "http://localhost:53362/assets/fonts/SFProDisplay-Semibold.3926eb65.woff2",
-  "assets/fonts/SFProDisplay-Medium.woff2": "http://localhost:53362/assets/fonts/SFProDisplay-Medium.22a99d36.woff2",
-  "assets/fonts/SFProDisplay-Regular.woff2": "http://localhost:53362/assets/fonts/SFProDisplay-Regular.d5ff9f68.woff2"
+  "assets/app.css": "/assets/app.5bb8cd6d.css",
+  "assets/app.js": "/assets/app.31d6cfe0.js",
+  "assets/fonts/SFProDisplay-Semibold.woff2": "/assets/fonts/SFProDisplay-Semibold.3926eb65.woff2",
+  "assets/fonts/SFProDisplay-Medium.woff2": "/assets/fonts/SFProDisplay-Medium.22a99d36.woff2",
+  "assets/fonts/SFProDisplay-Regular.woff2": "/assets/fonts/SFProDisplay-Regular.d5ff9f68.woff2"
 }
