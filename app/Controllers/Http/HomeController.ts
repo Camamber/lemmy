@@ -1,7 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { Mystem } from 'App/Classes/Mystem'
-import { Ngram } from 'App/Classes/ngram'
-import { Stopword } from 'App/Classes/stopword'
+import { Ngram } from 'App/Classes/Ngram'
+import { Stopword } from 'App/Classes/Stopword'
 
 export default class HomeController {
   public async index({ view }: HttpContextContract) {
