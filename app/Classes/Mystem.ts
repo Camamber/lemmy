@@ -4,7 +4,7 @@ import { resolve } from 'path'
 export class Mystem {
   private path: string
   constructor() {
-    this.path = resolve('resources', 'mystem', process.platform, process.arch, 'mystem')
+    this.path = resolve('vendor', process.platform, process.arch, 'mystem')
   }
 
   public lemmatize(text: string): Promise<string[]> {
