@@ -13,16 +13,16 @@
 <body class="bg-body h-full min-h-screen">
   <div class="container mx-auto py-14 px-8">
     <div class="grid grid-cols-12 gap-4">
-      <div class="col-span-5">
+      <div class="col-span-12 lg:col-span-5">
         <form method="post">
           <textarea name="text" rows="16" id="text"
-            class="border border-gray outline-none w-full leading-8 mb-4 px-5 pt-4" placeholder="Input here...">{{text? text: ''}}</textarea>
+            class="border border-gray outline-none w-full leading-8 mb-4 px-5 pt-4" placeholder="Input here...">{{text ? text: ''}}</textarea>
           </br>
           <input type="Submit" value="Lemmy Go"
             class="py-3 px-5 bg-secondary text-white rounded secondary font-semibold cursor-pointer hover:bg-opacity-95">
         </form>
       </div>
-      <div class="col-start-7 col-span-6">
+      <div class="col-span-12 mt-4 lg:mt-0 lg:col-start-7 lg:col-span-6">
         <table class="bg-white border border-gray">
           <thead>
             <tr class="border-b border-gray">
@@ -48,8 +48,8 @@
             <tr>
               <td class="py-2 px-5 border-r border-gray {{index % 2 ? 'bg-body': ''}}">
                 <div class="flex">
-                  <div class="w-{{item * 4 * 3}} h-4 bg-gray mr-4"></div>
-                  <div class="w-{{item * 4 * 2}} h-4 bg-gray"></div>
+                  <div class="w-12 lg:w-{{item * 4 * 3}} h-4 bg-gray mr-4"></div>
+                  <div class="w-{{item * 4 * 2/4}} lg:w-{{item * 4 * 2}} h-4 bg-gray"></div>
                 </div>
               </td>
               <td class="py-2 px-5 {{index % 2 ? 'bg-body': ''}}">
