@@ -17,15 +17,21 @@ export default class HomeController {
       lines.push(lems)
     }
 
+    console.log(lines)
+
     const stopword = new Stopword()
     lines = lines.map((lems) => {
       return stopword.removeStopwords(lems, 'ru')
     })
 
+    console.log(lines)
+
     const ngram = new Ngram()
     lines = lines.map((prepared) => {
       return ngram.bigrams(prepared)
     })
+
+    console.log(lines)
 
     let count = 0
     const frequency = {}
@@ -48,6 +54,7 @@ export default class HomeController {
       .filter((item: any) => item.value > 1)
       .sort((a: any, b: any) => b.value - a.value)
 
+    console.log(items)
     return view.render('index', { items, text, count })
   }
 }
