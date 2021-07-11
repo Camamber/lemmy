@@ -2,7 +2,7 @@ FROM node:lts as build
 
 WORKDIR /mystem
 
-RUN wget http://download.cdn.yandex.net/mystem/mystem-3.1-linux-64bit.tar.gz && tar -xzf rebol.tar.gz
+RUN wget http://download.cdn.yandex.net/mystem/mystem-3.1-linux-64bit.tar.gz && tar -xzf mystem-3.1-linux-64bit.tar.gz
 
 
 WORKDIR /app
