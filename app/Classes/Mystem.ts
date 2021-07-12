@@ -24,7 +24,7 @@ export class Mystem {
 
       mystem.stdout.on('end', function () {
         const items = chunks.toString().trim().split(/\n/g)
-        resolve(items.map((item) => item.trim()))
+        resolve(items.map((item) => item.split('|')[0].trim()))
       })
 
       mystem.stdin.end(text)

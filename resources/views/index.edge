@@ -35,9 +35,10 @@
             @each((item, index) in items)
             <tr>
               <td class="py-2 px-5 border-r border-gray {{index % 2 ? 'bg-body': ''}}"
-              @if(item.value * 100 / count > 3)
+              @if(item.value * 100 / count > 30)
                 style="color: red;"
               @end
+              title="{{item.value}} * 100 / {{count}}"
               >{{ item.key }}</td>
               <td class="py-2 px-5 {{index % 2 ? 'bg-body': ''}}">{{item.value}}</td>
               {{--  <td class="py-2 px-5 {{index % 2 ? 'bg-body': ''}}">{{item.value * 100 / count}}</td>  --}}
