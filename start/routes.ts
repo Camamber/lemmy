@@ -22,3 +22,6 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', 'HomeController.index')
 Route.post('/', 'HomeController.store')
+Route.post('/upload', 'HomeController.upload')
+Route.get('projects/:id', 'ProjectsController.show')
+Route.get('projects/:id/download', 'ProjectsController.download')

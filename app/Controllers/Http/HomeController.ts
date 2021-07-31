@@ -1,67 +1,108 @@
+import { cuid } from '@ioc:Adonis/Core/Helpers'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Mystem } from 'App/Classes/Mystem'
-import { Ngram } from 'App/Classes/Ngram'
-import { Stopword } from 'App/Classes/Stopword'
+import Project from 'App/Models/Project'
+import Semantic from 'App/Models/Semantic'
+import InputService from 'App/Services/InputService'
+import SemanticService from 'App/Services/SemanticService'
+import { unlinkSync } from 'fs'
+
+const DELIMITER = 'qwNLqw'
 
 export default class HomeController {
+  private inputService: InputService
+  private semanticService: SemanticService
+
+  constructor() {
+    this.inputService = new InputService()
+    this.semanticService = new SemanticService()
+  }
+
   public async index({ view }: HttpContextContract) {
     return view.render('index')
   }
 
-  public async store({ view, request }: HttpContextContract) {
+  public async store({ view, request, response }: HttpContextContract) {
+    const sheet = request.file('sheet', { extnames: ['xlsx', 'xls'] })
     const text: string = request.input('text', '')
-    if (!text) {
+
+    if (!text && !sheet) {
       return view.render('index')
     }
-    let lines: any[] = text.trim().split('\n')
 
-    const mystem = new Mystem()
-    console.time('a')
-    for (let i = 0; i < lines.length; i += 20) {
-      const chunk = lines.slice(i, i + 20)
-      const lems: string[][] = await Promise.all(chunk.map((line) => mystem.lemmatize(line.trim())))
-
-      lems.forEach((lem, index) => (lines[i + index] = lem))
+    console.time('parse input')
+    let lines: any[] = []
+    if (sheet) {
+      const fileName = `${cuid()}_${sheet.fileName}.${sheet.extname}`
+      await sheet.move('uploads', { name: fileName, overwrite: true })
+      lines = this.inputService.parseExcelFile('uploads/' + fileName)
+      unlinkSync('uploads/' + fileName)
+    } else {
+      lines = this.inputService.parseTextInput(text)
     }
-    console.timeEnd('a')
+    console.timeEnd('parse input')
 
-    const stopword = new Stopword()
-    lines = lines.map((lems) => {
-      return stopword.removeStopwords(lems, 'ru')
-    })
+    if (!lines.length) {
+      return view.render('index')
+    }
 
-    const ngram = new Ngram()
-    lines = lines.map((prepared) => {
-      return ngram.bigrams(prepared)
-    })
+    const project = new Project()
+    project.name = 'Project #' + Date.now()
+    project.ngram = 2
 
-    let count = 0
-    const frequency = {}
+    if (lines.reduce((acc, item) => acc + item.length, 0) / lines.length > 1) {
+      await project.save()
+    }
+
+    console.time(project.name)
+    const newText = lines.map((line) => line[0]).join(` ${DELIMITER} `)
+    let globalLemmas: string[] = await this.semanticService.lemmatize(newText)
+    globalLemmas = this.semanticService.removeStopwords(globalLemmas)
+
+    const labels: any[] = []
+    const rows: any[] = []
     for (const line of lines) {
-      if (!line.length) {
-        continue
+      if (line[1] && !labels.includes(line[1])) {
+        labels.push(line[1])
       }
-      for (const bigram of line) {
-        if (!bigram.length) {
-          continue
-        }
-        count++
-        const key = bigram.sort().join('_')
-        if (frequency[key]) {
-          frequency[key].value++
-        } else {
-          frequency[key] = {
-            key: bigram.join(' '),
-            value: 1,
-          }
-        }
+
+      const index = globalLemmas.indexOf(DELIMITER)
+      const lemmas: string[] = globalLemmas.splice(0, index + 1).filter((v) => v !== DELIMITER)
+      const ngrams = this.semanticService.transformToNgram(lemmas, 2)
+      for (const ngram of ngrams) {
+        rows.push({
+          project_id: project.id || 0,
+          ngram: ngram.sort().join(' '),
+          line: line[0],
+          label_id: line[1] ? labels.indexOf(line[1]) + 1 : 1,
+          label: line[1],
+          link: line[2],
+        })
       }
     }
 
-    const items = Object.values(frequency)
-      .filter((item: any) => item.value > 1)
-      .sort((a: any, b: any) => b.value - a.value)
+    if (project.id) {
+      await Semantic.createMany(rows)
+      console.timeEnd(project.name)
+      return response.redirect(`/projects/${project.id}`)
+    } else {
+      const items = this.semanticService.calculateFrequency(rows)
+      console.timeEnd(project.name)
+      return view.render('index', { items, text })
+    }
+  }
 
-    return view.render('index', { items, text, count })
+  public async upload({ request }: HttpContextContract) {
+    const sheet = request.file('sheet', { extnames: ['xlsx', 'xls'] })
+
+    if (sheet !== null) {
+      const fileName = `${cuid()}.${sheet.extname}`
+      await sheet.move('uploads', {
+        name: fileName,
+        overwrite: true,
+      })
+      return this.inputService.parseExcelFile('uploads/' + fileName)
+    }
+
+    console.log(sheet)
   }
 }

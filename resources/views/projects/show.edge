@@ -13,35 +13,35 @@
 <body class="bg-body h-full min-h-screen">
   <div class="container mx-auto py-14 px-8">
     <div class="grid grid-cols-12 gap-4">
-      <div class="col-span-12 lg:col-span-5">
-        <form method="post" enctype="multipart/form-data">
-          <textarea name="text" rows="16" id="text"
-            class="border border-gray outline-none w-full leading-8 mb-4 px-5 pt-4"
-            placeholder="Input here...">{{text ? text: ''}}</textarea>
-          </br>
-          OR
-          <div>
-            <input type="file" name="sheet" id="sheet_upload">
-          </div>
-          </br>
-          <input type="Submit" value="Lemmy Go"
-            class="py-3 px-5 bg-secondary text-white rounded secondary font-semibold cursor-pointer hover:bg-opacity-95">
-        </form>
+      <div class="col-span-12 flex">
+        {{project.name}}
+        @if(items)
+        <a class="ml-auto py-3 px-5 bg-secondary text-white rounded secondary font-semibold cursor-pointer hover:bg-opacity-95"
+          href="/projects/{{project.id}}/download">
+          Download Report
+        </a>
+        @end
       </div>
-      <div class="col-span-12 mt-4 lg:mt-0 lg:col-start-7 lg:col-span-6">
+      <div class="col-span-12">
         <table class="bg-white border border-gray w-full mb-4 ">
           <thead>
             <tr class="border-b border-gray">
-              <th class="border-r border-gray py-2 w-10/12 px-5 text-left font-medium">Ngram</th>
-              <th class="py-2 px-5 text-left w-2/12font-medium">Frequency</th>
+              <th class="border-r border-gray py-2 w-4/12 px-5 text-left font-medium">Bigram</th>
+              <th class="py-2 px-5 text-left w-8/12font-medium">Label</th>
+              <th class="py-2 px-5 text-left w-8/12font-medium">Frequency</th>
+              <th class="py-2 px-5 text-left w-8/12font-medium">Global frequency</th>
             </tr>
           </thead>
           <tbody>
             @if(items)
             @each((item, index) in items)
             <tr>
-              <td class="py-2 px-5 border-r border-gray {{index % 2 ? 'bg-body': ''}}">{{ item.ngram }}</td>
-              <td class="py-2 px-5 {{index % 2 ? 'bg-body': ''}}">{{ item.value }}</td>
+              <td style="background-color: {{colors[item.label]}}" class="py-2 px-5 border-r border-gray ">
+                {{ item.ngram }}</td>
+              <td style="background-color: {{colors[item.label]}}" class="py-2 px-5">{{ item.label }}</td>
+              <td style="background-color: {{colors[item.label]}}" class="py-2 px-5">{{ item.frequency }}</td>
+              <td style="background-color: {{colors[item.label]}}" class="py-2 px-5">
+                {{ item.global_frequency }}</td>
             </tr>
             @end
             @else

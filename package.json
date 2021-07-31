@@ -28,14 +28,22 @@
   },
   "dependencies": {
     "@adonisjs/core": "^5.1.9",
+    "@adonisjs/lucid": "^15.0.3",
     "@adonisjs/repl": "^3.1.4",
     "@adonisjs/session": "^6.1.0",
     "@adonisjs/shield": "^7.0.4",
     "@adonisjs/view": "^6.0.5",
+    "@types/lodash": "^4.14.171",
+    "csv-string": "^4.0.1",
+    "google-ads-api": "^5.2.0",
+    "lodash": "^4.17.21",
+    "luxon": "^2.0.1",
+    "node-xlsx": "^0.17.1",
+    "pino-pretty": "^5.1.1",
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.1.13",
     "source-map-support": "^0.5.19",
-    "stopword": "^1.0.7",
-    "pino-pretty": "^5.1.1"
+    "sqlite3": "^5.0.2",
+    "stopword": "^1.0.7"
   }
 }
