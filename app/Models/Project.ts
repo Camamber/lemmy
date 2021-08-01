@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
 import Database from '@ioc:Adonis/Lucid/Database'
+import HistoricalMetric from './HistoricalMetric'
 
 export default class Project extends BaseModel {
   @column({ isPrimary: true })
@@ -27,14 +28,19 @@ export default class Project extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
+  @hasOne(() => HistoricalMetric, {
+    foreignKey: 'project_id',
+  })
+  public historicalMetrics: HasOne<typeof HistoricalMetric>
+
   public async getFrequency() {
     const frequency = await Database.query()
       .from('semantics')
       .select(
+        'ngram',
         'label_id',
         Database.raw('max(label) as label'),
         'link',
-        'ngram',
         Database.raw('count(id) as frequency')
       )
       .where('project_id', this.id)

@@ -10,7 +10,6 @@ export default class Projects extends BaseSchema {
       table.integer('ngram')
       table.string('keyword_plan')
       table.string('plan_ad_group')
-      table.boolean('metrics')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

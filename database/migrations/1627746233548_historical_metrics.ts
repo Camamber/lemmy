@@ -9,6 +9,8 @@ export default class HistoricalMetrics extends BaseSchema {
       table.integer('project_id').unsigned()
       table.text('metrics')
 
+      table.foreign('project_id').references('id').inTable('projects').onDelete('CASCADE')
+
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

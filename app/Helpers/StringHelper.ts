@@ -20,7 +20,7 @@ export default class StringHelper {
     const multiplier = previousValue > 0 ? 100 : 1
     const growth = Math.round((diffValue / Math.max(previousValue, 1)) * multiplier)
     if (growth !== 0) {
-      return `(${growth}%)`
+      return `(${growth > 0 ? '+' : '-'}${Math.abs(growth)}%)`
     }
     return ''
   }

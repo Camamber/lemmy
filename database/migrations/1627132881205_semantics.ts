@@ -12,7 +12,6 @@ export default class Semantics extends BaseSchema {
       table.integer('label_id').unsigned()
       table.string('label')
       table.string('link')
-      table.text('google_json')
 
       table.foreign('project_id').references('id').inTable('projects').onDelete('CASCADE')
 

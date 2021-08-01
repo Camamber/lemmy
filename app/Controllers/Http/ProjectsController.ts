@@ -1,7 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import StringHelper from 'App/Helpers/StringHelper'
+import HistoricalMetric from 'App/Models/HistoricalMetric'
 import Project from 'App/Models/Project'
-import Semantic from 'App/Models/Semantic'
 import GoogleAdService from 'App/Services/GoogleAdService'
 import OutputService from 'App/Services/OutputService'
 import _ from 'lodash'
@@ -40,7 +40,7 @@ export default class ProjectsController {
   public async download({ params, response }: HttpContextContract) {
     const { id } = params
 
-    const project = await Project.find(id)
+    const project = await Project.query().where('id', id).preload('historicalMetrics').first()
     if (project === null) {
       return response.abort(404)
     }
@@ -60,51 +60,29 @@ export default class ProjectsController {
       }
     }
 
-    const r = await this.googleAdService.generateHistoricalMetrics(project.keywordPlan)
-    const metrics = _.keyBy(r.metrics, 'search_query')
+    let metrics = {}
+    if (project.historicalMetrics) {
+      metrics = JSON.parse(project.historicalMetrics.metrics)
+      console.log('find metrics')
+    } else {
+      const res = await this.googleAdService.generateHistoricalMetrics(project.keywordPlan)
+      metrics = _.keyBy(res.metrics, 'search_query')
+      console.log('remember metrics')
 
-    for (const query in metrics) {
-      if (Object.prototype.hasOwnProperty.call(metrics, query)) {
-        const metric = JSON.stringify(metrics[query])
-        await Semantic.query().where('ngram', query).update({ google_json: metric })
-      }
+      await HistoricalMetric.create({ project_id: project.id, metrics: JSON.stringify(metrics) })
     }
-
-    project.metrics = true
-    project.save()
-
-    frequency.forEach((item) => {
-      item['last_month_searches'] = 'n/a'
-      item['avg_monthly_searches_3'] = 'n/a'
-      item['avg_monthly_searches_6'] = 'n/a'
-      item['avg_monthly_searches_12'] = 'n/a'
-      const metric = metrics[item.ngram]
-      if (metric && metric.keyword_metrics) {
-        const monthlySearchVolumes = _.chain(metric.keyword_metrics.monthly_search_volumes)
-          .map('monthly_searches')
-          .map(Number)
-
-        const [prev, curr] = monthlySearchVolumes.takeRight(2).value()
-        const growth = StringHelper.calculateGrowth(curr, prev)
-
-        item['last_month_searches'] = monthlySearchVolumes.last().floor().value() + growth
-        item['avg_monthly_searches_3'] = monthlySearchVolumes.takeRight(3).mean().floor().value()
-        item['avg_monthly_searches_6'] = monthlySearchVolumes.takeRight(6).mean().floor().value()
-        item['avg_monthly_searches_12'] = metric.keyword_metrics.avg_monthly_searches
-      }
-    })
 
     const debug = false
 
     if (debug) {
-      const csv = this.outputService.toCSV(frequency)
-      response.header('Content-Disposition', `attachment; filename="${id}.csv"`)
+      const csv = this.outputService.toCSV(frequency, metrics)
+      response.header('Content-Disposition', `attachment; filename="${project.name}.csv"`)
       response.header('Content-Type', 'application/vnd.openxmlformats; charset=utf-16le')
       response.send('\ufeff' + csv)
     } else {
-      const xlsx = this.outputService.toExcel(frequency)
-      response.header('Content-Disposition', `attachment; filename="${id}.xlsx"`)
-      response.header('Content-Type', 'application/vnd.openxmlformats; charset=utf-16le')
+      const xlsx = this.outputService.toExcel(frequency, metrics)
+      response.header('Content-Disposition', `attachment; filename="${project.name}.xlsx"`)
+      response.header('Content-Type', 'application/vnd.openxmlformats')
       response.send(xlsx)
     }
   }
