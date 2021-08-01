@@ -37,6 +37,19 @@ export default class ProjectsController {
     return view.render('projects/show', { items: frequency, project, colors })
   }
 
+  public async delete({ params, response }: HttpContextContract) {
+    const { id } = params
+    const project = await Project.find(id)
+
+    if (project === null) {
+      return response.abort(404)
+    }
+
+    await project.delete()
+
+    return response.redirect('/')
+  }
+
   public async download({ params, response }: HttpContextContract) {
     const { id } = params
 

@@ -10,16 +10,28 @@
   @entryPointScripts('app')
 </head>
 
-<body class="bg-body h-full min-h-screen">
+<body class="bg-body h-full min-h-screen ">
   <div class="container mx-auto py-14 px-8">
     <div class="grid grid-cols-12 gap-4">
-      <div class="col-span-12 flex">
-        {{project.name}}
-        @if(items)
-        <a class="ml-auto py-3 px-5 bg-secondary text-white rounded secondary font-semibold cursor-pointer hover:bg-opacity-95"
-          href="/projects/{{project.id}}/download">
-          Download Report
-        </a>
+      <div class="col-span-12 flex items-start content-start">
+        <div class="font-bold w-2/4 bg-white border rounded px-5 py-3">
+          {{project.name}}
+        </div>
+        <div class="ml-auto flex">
+          <button class="py-3 px-4 mr-2 bg-danger text-white rounded secondary font-semibold hover:bg-opacity-95"
+            onclick="deleteProject({{project.id}})">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M3.66683 3.00004V1.00004C3.66683 0.82323 3.73707 0.65366 3.86209 0.528636C3.98712 0.403612 4.15669 0.333374 4.3335 0.333374H9.66683C9.84364 0.333374 10.0132 0.403612 10.1382 0.528636C10.2633 0.65366 10.3335 0.82323 10.3335 1.00004V3.00004H13.6668V4.33337H12.3335V13C12.3335 13.1769 12.2633 13.3464 12.1382 13.4714C12.0132 13.5965 11.8436 13.6667 11.6668 13.6667H2.3335C2.15669 13.6667 1.98712 13.5965 1.86209 13.4714C1.73707 13.3464 1.66683 13.1769 1.66683 13V4.33337H0.333496V3.00004H3.66683ZM7.94283 8.33337L9.1215 7.15471L8.17883 6.21204L7.00016 7.39071L5.8215 6.21204L4.87883 7.15471L6.0575 8.33337L4.87883 9.51204L5.8215 10.4547L7.00016 9.27604L8.17883 10.4547L9.1215 9.51204L7.94283 8.33337ZM5.00016 1.66671V3.00004H9.00016V1.66671H5.00016Z" />
+            </svg>
+          </button>
+          @if(items)
+          <a class="py-3 px-5 bg-secondary text-white rounded secondary font-semibold hover:bg-opacity-95"
+            href="download">
+            Download Report
+          </a>
+        </div>
+
         @end
       </div>
       <div class="col-span-12">
@@ -64,6 +76,14 @@
       </div>
     </div>
   </div>
+  <script>
+    function deleteProject(id) {
+      console.log(id)
+      return fetch({url: `/projects/${id}`, method: 'DELETE'}).then(r => {
+        window.location = '/'
+      })
+    }
+  </script>
 </body>
 
 </html>

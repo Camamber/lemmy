@@ -15,7 +15,13 @@
     <div class="grid grid-cols-12 gap-4">
       <div class="col-span-12 lg:col-span-5">
         <form method="post" enctype="multipart/form-data">
-          <textarea name="text" rows="16" id="text"
+          <ul class="flex items-center">
+            <span class="mr-2">N-gram</span>
+            <li class="mr-2"><input type="radio" name="ngram" value="2" checked>2</li>
+            <li class="mr-2"><input type="radio" name="ngram" value="3">3</li>
+            <li><input type="radio" name="ngram" value="4">4</li>
+          </ul>
+          <textarea name="text" rows="13" id="text"
             class="border border-gray outline-none w-full leading-8 mb-4 px-5 pt-4"
             placeholder="Input here...">{{text ? text: ''}}</textarea>
           </br>
@@ -45,12 +51,12 @@
             </tr>
             @end
             @else
-            @each((item, index) in [5,3,4,3,5,3,4,3])
+            @each((item, index) in [5,3,4,3])
             <tr>
               <td class="py-2 px-5 border-r border-gray {{index % 2 ? 'bg-body': ''}}">
                 <div class="flex">
                   <div class="w-12 lg:w-{{item * 4 * 3}} h-4 bg-gray mr-4"></div>
-                  <div class="w-{{item * 4 * 2/4}} lg:w-{{item * 4 * 2}} h-4 bg-gray"></div>
+                  <div class="w-12 lg:w-{{item * 4 * 2}} h-4 bg-gray"></div>
                 </div>
               </td>
               <td class="py-2 px-5 {{index % 2 ? 'bg-body': ''}}">
@@ -64,6 +70,7 @@
       </div>
     </div>
   </div>
+  <div class="lg:w-60 lg:w-36 lg:w-48 lg:w-32 lg:w-24 lg:w-40"></div>
 </body>
 
 </html>

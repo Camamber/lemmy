@@ -1,4 +1,5 @@
 module.exports = {
+  mode: 'jit',
   purge: ['./resources/views/**/*.edge', './resources/assets/ts/**/*.ts'],
   darkMode: false, // or 'media' or 'class'
   theme: {
@@ -16,6 +17,9 @@ module.exports = {
       },
       secondary: {
         DEFAULT: '#5B59E0',
+      },
+      danger: {
+        DEFAULT: '#E3342F',
       },
     },
     extend: {},

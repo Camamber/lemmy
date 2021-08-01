@@ -24,6 +24,7 @@ export default class HomeController {
   public async store({ view, request, response }: HttpContextContract) {
     const sheet = request.file('sheet', { extnames: ['xlsx', 'xls'] })
     const text: string = request.input('text', '')
+    const ngram: number = request.input('ngram', 2)
 
     if (!text && !sheet) {
       return view.render('index')
@@ -32,7 +33,7 @@ export default class HomeController {
     console.time('parse input')
     let lines: any[] = []
     if (sheet) {
-      const fileName = `${cuid()}_${sheet.fileName}.${sheet.extname}`
+      const fileName = `${cuid()}.${sheet.extname}`
       await sheet.move('uploads', { name: fileName, overwrite: true })
       lines = this.inputService.parseExcelFile('uploads/' + fileName)
       unlinkSync('uploads/' + fileName)
@@ -47,7 +48,7 @@ export default class HomeController {
 
     const project = new Project()
     project.name = 'Project #' + Date.now()
-    project.ngram = 2
+    project.ngram = ngram
 
     if (lines.reduce((acc, item) => acc + item.length, 0) / lines.length > 1) {
       await project.save()
@@ -67,7 +68,7 @@ export default class HomeController {
 
       const index = globalLemmas.indexOf(DELIMITER)
       const lemmas: string[] = globalLemmas.splice(0, index + 1).filter((v) => v !== DELIMITER)
-      const ngrams = this.semanticService.transformToNgram(lemmas, 2)
+      const ngrams = this.semanticService.transformToNgram(lemmas, project.ngram)
       for (const ngram of ngrams) {
         rows.push({
           project_id: project.id || 0,

@@ -8,7 +8,6 @@ export default class InputService {
   }
 
   public parseExcelFile(filepath) {
-    console.log(filepath)
     const workSheetsFromBuffer = xlsx.parse(filepath)
     const page = workSheetsFromBuffer[0]
 
