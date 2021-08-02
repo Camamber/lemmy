@@ -1,0 +1,44 @@
+<div class="flex flex-col flex-grow mb-3">
+  <div x-data="{ file: null }" id="FileUpload"
+    class="block w-full px-5 py-4 relative bg-white appearance-none border border-gray">
+    <input type="file" name="sheet" id="sheet_upload" x-bind:class="file ? 'h-1' : 'h-full'"
+      class="absolute inset-0 z-50 m-0 p-0 w-full  outline-none opacity-0 cursor-pointer"
+      x-on:change="file = $event.target.files[0]; console.log($event.target.files[0]);"
+      x-on:dragover="$el.classList.add('active')" x-on:dragleave="$el.classList.remove('active')"
+      x-on:drop="$el.classList.remove('active')"
+      accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+
+    <template x-if="file !== null">
+      <div class="flex flex-col space-y-2 align-center">
+        <div class="flex">
+          <svg class="w-14 text-gray" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 384 512">
+            <path fill="currentColor"
+              d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm60.1 106.5L224 336l60.1 93.5c5.1 8-.6 18.5-10.1 18.5h-34.9c-4.4 0-8.5-2.4-10.6-6.3C208.9 405.5 192 373 192 373c-6.4 14.8-10 20-36.6 68.8-2.1 3.9-6.1 6.3-10.5 6.3H110c-9.5 0-15.2-10.5-10.1-18.5l60.3-93.5-60.3-93.5c-5.2-8 .6-18.5 10.1-18.5h34.8c4.4 0 8.5 2.4 10.6 6.3 26.1 48.8 20 33.6 36.6 68.5 0 0 6.1-11.7 36.6-68.5 2.1-3.9 6.2-6.3 10.6-6.3H274c9.5-.1 15.2 10.4 10.1 18.4zM384 121.9v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z">
+            </path>
+          </svg>
+          <div class="ml-4">
+            <p class="font-semibold" x-text="file.name">Uploading...</p>
+            <p class="text-gray" x-text="Math.ceil(file.size / 1024) + 'KB'">0B</p>
+            <p class="text-gray" x-text="file.lastModifiedDate.toLocaleString()"></p>
+          </div>
+        </div>
+        <button x-on:click="file = null" class="mr-auto py-1 px-3 text-white text-center rounded bg-danger">Delete
+          file</button>
+      </div>
+    </template>
+
+    <template x-if="file === null">
+      <div class="flex flex-col space-y-2 items-center justify-center">
+        <svg class="w-14 text-gray" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 640 512">
+          <path fill="currentColor"
+            d="M537.6 226.6c4.1-10.7 6.4-22.4 6.4-34.6 0-53-43-96-96-96-19.7 0-38.1 6-53.3 16.2C367 64.2 315.3 32 256 32c-88.4 0-160 71.6-160 160 0 2.7.1 5.4.2 8.1C40.2 219.8 0 273.2 0 336c0 79.5 64.5 144 144 144h368c70.7 0 128-57.3 128-128 0-61.9-44-113.6-102.4-125.4zM393.4 288H328v112c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V288h-65.4c-14.3 0-21.4-17.2-11.3-27.3l105.4-105.4c6.2-6.2 16.4-6.2 22.6 0l105.4 105.4c10.1 10.1 2.9 27.3-11.3 27.3z">
+          </path>
+        </svg>
+        <p>Drag your file here or click in this area (.xls .xlsx .csv)</p>
+        <button class="mx-auto py-1 px-3 text-white text-center rounded bg-secondary">Select a file</button>
+      </div>
+    </template>
+  </div>
+</div>

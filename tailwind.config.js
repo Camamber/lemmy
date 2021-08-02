@@ -1,5 +1,5 @@
 module.exports = {
-  mode: 'jit',
+  // mode: 'jit',
   purge: ['./resources/views/**/*.edge', './resources/assets/ts/**/*.ts'],
   darkMode: false, // or 'media' or 'class'
   theme: {
