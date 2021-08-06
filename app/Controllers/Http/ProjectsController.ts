@@ -18,23 +18,43 @@ export default class ProjectsController {
   public async show({ params, view, response }: HttpContextContract) {
     const { id } = params
 
-    const project = await Project.find(id)
+    const project = await Project.query().where('id', id).preload('historicalMetrics').first()
 
     if (project === null) {
       return response.abort(404)
     }
     const frequency: any[] = await project.getFrequency()
 
+    let metrics = {}
+    if (project.historicalMetrics) {
+      metrics = JSON.parse(project.historicalMetrics.metrics)
+    }
+    metrics = _.chain(metrics)
+      .mapValues('keyword_metrics.monthly_search_volumes')
+      .mapValues(function (item: any[]) {
+        if (item) {
+          const min = Math.min(...item.map((jitem) => +jitem.monthly_searches))
+          const max = Math.max(...item.map((jitem) => +jitem.monthly_searches))
+          return item.map((jitem) => {
+            return {
+              label: `${jitem.month} ${jitem.year}: ${jitem.monthly_searches}`,
+              value: ((20 - 0) / (max - min)) * (+jitem.monthly_searches - max) + 20,
+            }
+          })
+        }
+      })
+      .value()
+
     const colors = _.chain(frequency)
       .map((item) => ({
         key: item.label,
-        value: StringHelper.toRGB(item.label, 0.2),
+        value: StringHelper.toRGB(item.label),
       }))
       .keyBy('key')
       .mapValues('value')
       .value()
 
-    return view.render('projects/show', { items: frequency, project, colors })
+    return view.render('projects/show', { items: frequency, project, colors, metrics })
   }
 
   public async delete({ params, response }: HttpContextContract) {
@@ -43,6 +63,10 @@ export default class ProjectsController {
 
     if (project === null) {
       return response.abort(404)
+    }
+    if (project.keywordPlan) {
+      const r = await this.googleAdService.deleteKeywordPlan(project.keywordPlan)
+      console.log(r)
     }
 
     await project.delete()
@@ -89,12 +113,18 @@ export default class ProjectsController {
 
     if (debug) {
       const csv = this.outputService.toCSV(frequency, metrics)
-      response.header('Content-Disposition', `attachment; filename="${project.name}.csv"`)
+      response.header(
+        'Content-Disposition',
+        `attachment; filename="${encodeURIComponent(project.name)}-report.csv"`
+      )
       response.header('Content-Type', 'application/vnd.openxmlformats; charset=utf-16le')
       response.send('\ufeff' + csv)
     } else {
       const xlsx = this.outputService.toExcel(frequency, metrics)
-      response.header('Content-Disposition', `attachment; filename="${project.name}.xlsx"`)
+      response.header(
+        'Content-Disposition',
+        `attachment; filename="${encodeURIComponent(project.name)}-report.xlsx"`
+      )
       response.header('Content-Type', 'application/vnd.openxmlformats')
       response.send(xlsx)
     }

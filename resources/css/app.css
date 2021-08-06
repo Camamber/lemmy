@@ -20,6 +20,26 @@ body {
   font-family: SFProDisplay;
 }
 
+.bar {
+  fill: #aaa;
+  cursor: pointer;
+}
+
+.bar:hover,
+.bar:focus {
+  fill: red;
+}
+
+figcaption {
+  font-size: 8px;
+  height: 10px;
+  text-align: right;
+  font-weight: bold;
+  color: #000;
+}
+
+
+
 
 @font-face {
   font-family: "SFProDisplay";

@@ -49,7 +49,9 @@ export default class HomeController {
     const project = new Project()
     project.name = 'Project #' + Date.now()
     project.ngram = ngram
-
+    if (sheet) {
+      project.name = sheet.clientName.replace('.' + sheet.extname, '')
+    }
     if (lines.reduce((acc, item) => acc + item.length, 0) / lines.length > 1) {
       await project.save()
     }
@@ -90,20 +92,5 @@ export default class HomeController {
       console.timeEnd(project.name)
       return view.render('index', { items, text })
     }
-  }
-
-  public async upload({ request }: HttpContextContract) {
-    const sheet = request.file('sheet', { extnames: ['xlsx', 'xls'] })
-
-    if (sheet !== null) {
-      const fileName = `${cuid()}.${sheet.extname}`
-      await sheet.move('uploads', {
-        name: fileName,
-        overwrite: true,
-      })
-      return this.inputService.parseExcelFile('uploads/' + fileName)
-    }
-
-    console.log(sheet)
   }
 }

@@ -31,6 +31,10 @@ export default class GoogleAdService {
     return [keywordPlanResource, planAdGroupResource]
   }
 
+  public deleteKeywordPlan(keywordPlanResource: string) {
+    return this.customer.keywordPlans.remove([keywordPlanResource])
+  }
+
   public async addKeywords(planAdGroupResource, keywords) {
     await this.createKeywordPlanAdGroupKeywords(this.customer, planAdGroupResource, keywords)
   }

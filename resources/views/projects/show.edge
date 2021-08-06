@@ -12,54 +12,108 @@
 
 <body class="bg-body h-full min-h-screen ">
   <div class="container mx-auto py-14 px-8">
+    <div class="flex items-center mb-4">
+      <a class="underline mr-1" href="/">Home</a>
+      <span class="mr-1">></span>
+      <span class="underline mr-1">Projects</span>
+      <span class="mr-1">></span>
+      <span class="underline mr-1">{{project.id}}</span>
+
+    </div>
+
     <div class="grid grid-cols-12 gap-4">
       <div class="col-span-12 flex items-start content-start">
+        {{--  <a class="py-4 px-5 bg-secondary text-white rounded font-semibold hover:bg-opacity-95 mr-2" href="/">
+          <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+            <path fill="currentColor"
+              d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z">
+            </path>
+          </svg>
+        </a>  --}}
         <div class="font-bold w-2/4 bg-white border rounded px-5 py-3">
           {{project.name}}
         </div>
         <div class="ml-auto flex">
-          <button class="py-3 px-4 mr-2 bg-danger text-white rounded secondary font-semibold hover:bg-opacity-95"
+          <button class="py-3 px-4 mr-2 bg-danger text-white rounded font-semibold hover:bg-opacity-95"
             onclick="deleteProject({{project.id}})">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <svg class="w-4 h-4" viewBox="0 0 14 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M3.66683 3.00004V1.00004C3.66683 0.82323 3.73707 0.65366 3.86209 0.528636C3.98712 0.403612 4.15669 0.333374 4.3335 0.333374H9.66683C9.84364 0.333374 10.0132 0.403612 10.1382 0.528636C10.2633 0.65366 10.3335 0.82323 10.3335 1.00004V3.00004H13.6668V4.33337H12.3335V13C12.3335 13.1769 12.2633 13.3464 12.1382 13.4714C12.0132 13.5965 11.8436 13.6667 11.6668 13.6667H2.3335C2.15669 13.6667 1.98712 13.5965 1.86209 13.4714C1.73707 13.3464 1.66683 13.1769 1.66683 13V4.33337H0.333496V3.00004H3.66683ZM7.94283 8.33337L9.1215 7.15471L8.17883 6.21204L7.00016 7.39071L5.8215 6.21204L4.87883 7.15471L6.0575 8.33337L4.87883 9.51204L5.8215 10.4547L7.00016 9.27604L8.17883 10.4547L9.1215 9.51204L7.94283 8.33337ZM5.00016 1.66671V3.00004H9.00016V1.66671H5.00016Z" />
             </svg>
           </button>
           @if(items)
+          {{--  <a class="flex items-center py-3 px-5 mr-2 bg-secondary text-white rounded secondary font-semibold hover:bg-opacity-95"
+            href="metrics">
+            <svg class="mr-2 w-4 h-4" viewBox="0 0 249 227" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M84.9 28.5671C87.3 22.2671 90.6 16.4671 95.5 11.7671C115.1 -7.33293 147.5 -2.53293 160.8 21.4671C170.8 39.6671 181.4 57.4671 191.7 75.4671C208.9 105.367 226.3 135.267 243.3 165.267C257.6 190.367 242.1 222.067 213.7 226.367C196.3 228.967 180 220.967 171 205.367C155.9 179.067 140.7 152.767 125.6 126.567C125.3 125.967 124.9 125.467 124.5 124.967C122.9 123.667 122.2 121.767 121.2 120.067C114.5 108.267 107.6 96.5671 100.9 84.8671C96.6 77.2671 92.1 69.7671 87.8 62.1671C83.9 55.3671 82.1 47.9671 82.3 40.1671C82.6 36.1671 83.1 32.1671 84.9 28.5671Z"
+                fill="#3C8BD9" />
+              <path
+                d="M84.9 28.5671C84 32.1671 83.2 35.7671 83 39.5671C82.7 47.9671 84.8 55.7671 89 63.0671C100 81.9671 111 100.967 121.9 119.967C122.9 121.667 123.7 123.367 124.7 124.967C118.7 135.367 112.7 145.667 106.6 156.067C98.2 170.567 89.8 185.167 81.3 199.667C80.9 199.667 80.8 199.467 80.7 199.167C80.6 198.367 80.9 197.667 81.1 196.867C85.2 181.867 81.8 168.567 71.5 157.167C65.2 150.267 57.2 146.367 48 145.067C36 143.367 25.4 146.467 15.9 153.967C14.2 155.267 13.1 157.167 11.1 158.167C10.7 158.167 10.5 157.967 10.4 157.667C15.2 149.367 19.9 141.067 24.7 132.767C44.5 98.3671 64.3 63.9671 84.2 29.6671C84.4 29.2671 84.7 28.9671 84.9 28.5671Z"
+                fill="#FABC04" />
+              <path
+                d="M10.8 157.967C12.7 156.267 14.5 154.467 16.5 152.867C40.8 133.667 77.3 147.567 82.6 177.967C83.9 185.267 83.2 192.267 81 199.267C80.9 199.867 80.8 200.367 80.6 200.967C79.7 202.567 78.9 204.267 77.9 205.867C69 220.567 55.9 227.867 38.7 226.767C19 225.367 3.50001 210.567 0.800008 190.967C-0.499992 181.467 1.40001 172.567 6.30001 164.367C7.30001 162.567 8.50001 160.967 9.60001 159.167C10.1 158.767 9.90001 157.967 10.8 157.967Z"
+                fill="#34A852" />
+              <path
+                d="M10.8 157.967C10.4 158.367 10.4 159.067 9.70002 159.167C9.60002 158.467 10 158.067 10.4 157.567L10.8 157.967Z"
+                fill="#FABC04" />
+              <path
+                d="M80.6 200.967C80.2 200.267 80.6 199.767 81 199.267C81.1 199.367 81.3 199.567 81.4 199.667L80.6 200.967Z"
+                fill="#E1C025" />
+            </svg>
+
+            Fetch Metrics
+          </a>  --}}
           <a class="py-3 px-5 bg-secondary text-white rounded secondary font-semibold hover:bg-opacity-95"
-            href="download">
+            href="/projects/{{project.id}}/download">
             Download Report
           </a>
+          @end
         </div>
-
-        @end
       </div>
       <div class="col-span-12">
         <table class="bg-white border border-gray w-full mb-4 ">
           <thead>
             <tr class="border-b border-gray">
-              <th class="border-r border-gray py-2 w-4/12 px-5 text-left font-medium">Bigram</th>
-              <th class="py-2 px-5 text-left w-8/12font-medium">Label</th>
-              <th class="py-2 px-5 text-left w-8/12font-medium">Frequency</th>
-              <th class="py-2 px-5 text-left w-8/12font-medium">Global frequency</th>
+              <th class="border-r border-gray py-3 px-2 text-left font-medium">Bigram</th>
+              <th class="border-r border-gray py-3 px-2 text-leftfont-medium">Label</th>
+              <th class="border-r border-gray py-3 px-2 text-left font-medium">Frequency</th>
+              <th class="border-r border-gray py-3 px-2 text-left font-medium">Global frequency</th>
+              <th class="py-3 px-2 text-left font-medium">Google Ads metrics</th>
             </tr>
           </thead>
           <tbody>
             @if(items)
             @each((item, index) in items)
             <tr>
-              <td style="background-color: {{colors[item.label]}}" class="py-2 px-5 border-r border-gray ">
-                {{ item.ngram }}</td>
-              <td style="background-color: {{colors[item.label]}}" class="py-2 px-5">{{ item.label }}</td>
-              <td style="background-color: {{colors[item.label]}}" class="py-2 px-5">{{ item.frequency }}</td>
-              <td style="background-color: {{colors[item.label]}}" class="py-2 px-5">
-                {{ item.global_frequency }}</td>
+              <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
+                class="py-2 px-5 border-r border-gray">
+                {{ item.ngram }}
+              </td>
+              <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
+                class="py-2 px-5 border-r border-gray">
+                <a href="{{item.link}}">{{ item.label }}</a>
+              </td>
+              <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
+                class="py-2 px-5 border-r border-gray">
+                {{ item.frequency }}
+              </td>
+              <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
+                class="py-2 px-5 border-r border-gray">
+                {{ item.global_frequency }}
+              </td>
+              <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
+                class="py-2 px-5">
+                @if(metrics[item.ngram])
+                @include('partials/diagram')
+                @end
+              </td>
             </tr>
             @end
             @else
             @each((item, index) in [5,3,4,3,5,3,4,3])
             <tr>
-              <td class="py-2 px-5 border-r border-gray {{index % 2 ? 'bg-body': ''}}">
+              <td class="py-2 px-5 border-r border-black {{index % 2 ? 'bg-body': ''}}">
                 <div class="flex">
                   <div class="w-12 lg:w-{{item * 4 * 3}} h-4 bg-gray mr-4"></div>
                   <div class="w-{{item * 4 * 2/4}} lg:w-{{item * 4 * 2}} h-4 bg-gray"></div>
@@ -78,11 +132,24 @@
   </div>
   <script>
     function deleteProject(id) {
-      console.log(id)
-      return fetch({url: `/projects/${id}`, method: 'DELETE'}).then(r => {
+      return fetch(`/projects/${id}`, {method: 'DELETE'}).then(r => {
         window.location = '/'
       })
     }
+
+    document.querySelectorAll('figure').forEach(figure => {
+      const label = figure.querySelector('figcaption')
+      figure.querySelectorAll('.bar').forEach(bar => {
+        bar.addEventListener('mouseenter', e => {
+          label.innerText = bar.dataset.value
+        })
+
+        bar.addEventListener('mouseleave', e => {
+          label.innerText = ''
+        })
+      })
+    })
+
   </script>
 </body>
 

@@ -1,0 +1,29 @@
+{{--  <figure>
+  <figcaption></figcaption>
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="chart"
+    width="240" height="30" aria-labelledby="title" role="img">
+    <title id="title">A bart chart showing information</title>
+    @each((month, jindex) in metrics[item.ngram])
+    @if(month)
+    <g class="bar" data-value="{{month.label}}">
+<rect height="{{month.value}}" width="19" y="{{30 - month.value}}" x="{{jindex * 20}}"></rect>
+</g>
+@end
+@end
+</svg>
+</figure> --}}
+
+<figure style="width:250px">
+  <figcaption></figcaption>
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="chart"
+    width="240" height="20" aria-labelledby="title" role="img">
+    <title id="title">A bart chart showing information</title>
+    @each((month, jindex) in metrics[item.ngram])
+    @if(month)
+    <rect class="bar" data-value="{{month.label}}" height="{{month.value}}" width="19" y="{{20 - month.value}}"
+      x="{{jindex * 20}}">
+    </rect>
+    @end
+    @end
+  </svg>
+</figure>

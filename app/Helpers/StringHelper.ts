@@ -1,5 +1,5 @@
 export default class StringHelper {
-  public static toRGB(text, a) {
+  public static toRGB(text) {
     var hash = 0
     if (text.length === 0) return hash
     for (var i = 0; i < text.length; i++) {
@@ -11,7 +11,7 @@ export default class StringHelper {
       var value = (hash >> (i * 8)) & 255
       rgb[i] = value
     }
-    return `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${a})`
+    return `${rgb[0]}, ${rgb[1]}, ${rgb[2]}`
   }
 
   public static calculateGrowth(value, previousValue) {
