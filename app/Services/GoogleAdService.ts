@@ -1,4 +1,4 @@
-import { Customer, enums, GoogleAdsApi, ResourceNames } from 'google-ads-api'
+import { Customer, enums, GoogleAdsApi, ResourceNames, services } from 'google-ads-api'
 import Env from '@ioc:Adonis/Core/Env'
 
 export default class GoogleAdService {
@@ -40,9 +40,9 @@ export default class GoogleAdService {
   }
 
   public async generateHistoricalMetrics(keywordPlanResource: string) {
-    const generateHistoricalMetricsRequest = {
+    const generateHistoricalMetricsRequest = services.GenerateHistoricalMetricsRequest.create({
       keyword_plan: keywordPlanResource,
-    }
+    })
 
     const response = await this.customer.keywordPlans.generateHistoricalMetrics(
       generateHistoricalMetricsRequest
