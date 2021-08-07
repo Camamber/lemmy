@@ -16,28 +16,24 @@ COPY . .
 RUN npm run build
 
 
-FROM node:lts
+FROM ubuntu:latest
 
 RUN apt-get upgrade && apt-get update  && apt-get install curl -y
 RUN curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
 RUN bash nodesource_setup.sh
 RUN apt-get install nodejs -y
 
-
-WORKDIR /home/node/app
+WORKDIR /app
 
 COPY --from=build /app/build ./
 COPY --from=build /app/.env ./
 COPY --from=build /mystem ./vendor/linux/x64/
 
-RUN chown -R node:node /home/node
+RUN mkdir tmp
 
 RUN npm ci --production
 
 RUN npm install pino-pretty
-
-USER node
-
-RUN npm ace migration:run
+RUN node ace migration:run
 
 CMD ["npm", "start"]
