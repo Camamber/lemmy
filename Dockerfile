@@ -23,14 +23,19 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
 RUN bash nodesource_setup.sh
 RUN apt-get install nodejs -y
 
-WORKDIR /app
+USER node
+
+WORKDIR /home/node/app
 
 COPY --from=build /app/build ./
 COPY --from=build /app/.env ./
 COPY --from=build /mystem ./vendor/linux/x64/
 
+RUN chown -R node:node /home/node
+
 RUN npm ci --production
 
 RUN npm install pino-pretty
+RUN npm ace migration:run
 
 CMD ["npm", "start"]
