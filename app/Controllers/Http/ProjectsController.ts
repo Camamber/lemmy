@@ -76,11 +76,13 @@ export default class ProjectsController {
 
   public async download({ params, response }: HttpContextContract) {
     const { id } = params
+    console.log(1)
 
     const project = await Project.query().where('id', id).preload('historicalMetrics').first()
     if (project === null) {
       return response.abort(404)
     }
+    console.log(2)
 
     const frequency: any[] = await project.getFrequency()
 
@@ -96,6 +98,7 @@ export default class ProjectsController {
         await this.googleAdService.addKeywords(project.planAdGroup, keywords)
       }
     }
+    console.log(3)
 
     let metrics = {}
     if (project.historicalMetrics) {
@@ -108,8 +111,10 @@ export default class ProjectsController {
 
       await HistoricalMetric.create({ project_id: project.id, metrics: JSON.stringify(metrics) })
     }
+    console.log(4)
 
     const xlsx = this.outputService.toExcel(frequency, metrics)
+    console.log(xlsx)
     response.header(
       'Content-Disposition',
       `attachment; filename="${encodeURIComponent(project.name)}-report.xlsx"`
