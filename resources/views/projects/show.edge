@@ -10,7 +10,15 @@
   @entryPointScripts('app')
 </head>
 
-<body class="bg-body h-full min-h-screen ">
+<body class="bg-body h-full min-h-screen relative">
+  <div id="overlay" class="w-full h-full absolute bg-gray bg-opacity-50 hidden">
+    <div class="lds-ellipsis">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
   <div class="container mx-auto py-14 px-8">
     <div class="flex items-center mb-4">
       <a class="underline mr-1" href="/">Home</a>
@@ -132,6 +140,7 @@
   </div>
   <script>
     function deleteProject(id) {
+      document.getElementById('overlay').classList.toggle('hidden')
       return fetch(`/projects/${id}`, {method: 'DELETE'}).then(r => {
         window.location = '/'
       })

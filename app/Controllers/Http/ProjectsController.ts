@@ -109,24 +109,12 @@ export default class ProjectsController {
       await HistoricalMetric.create({ project_id: project.id, metrics: JSON.stringify(metrics) })
     }
 
-    const debug = false
-
-    if (debug) {
-      const csv = this.outputService.toCSV(frequency, metrics)
-      response.header(
-        'Content-Disposition',
-        `attachment; filename="${encodeURIComponent(project.name)}-report.csv"`
-      )
-      response.header('Content-Type', 'application/vnd.openxmlformats; charset=utf-16le')
-      response.send('\ufeff' + csv)
-    } else {
-      const xlsx = this.outputService.toExcel(frequency, metrics)
-      response.header(
-        'Content-Disposition',
-        `attachment; filename="${encodeURIComponent(project.name)}-report.xlsx"`
-      )
-      response.header('Content-Type', 'application/vnd.openxmlformats')
-      response.send(xlsx)
-    }
+    const xlsx = this.outputService.toExcel(frequency, metrics)
+    response.header(
+      'Content-Disposition',
+      `attachment; filename="${encodeURIComponent(project.name)}-report.xlsx"`
+    )
+    response.header('Content-Type', 'application/vnd.openxmlformats')
+    response.send(xlsx)
   }
 }
