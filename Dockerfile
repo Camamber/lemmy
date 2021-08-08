@@ -33,13 +33,6 @@ RUN npm ci --only=production
 
 # Build final runtime container
 FROM node:14-alpine
-# Set environment variables
-ENV NODE_ENV=production
-# Disable .env file loading
-ENV ENV_SILENT=true
-# Set app key at start time
-ENV APP_KEY=
-
 # Use non-root user
 USER node
 # Make directory for app to live in
@@ -58,6 +51,7 @@ COPY --from=installer /home/node/mystem ./vendor/linux/x64/
 # Copy over package.json files
 COPY package*.json ./
 # Expose port 3333 to outside world
+RUN ls
 EXPOSE 3333
 # Start server up
 CMD [ "npm", "start" ]
