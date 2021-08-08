@@ -1,56 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
+@include('partials/header')
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lemmy - Smart lemmatization tool for SEO needs.</title>
-  @entryPointStyles('app')
-  @entryPointScripts('app')
-</head>
-
-<body class="bg-body h-full min-h-screen relative">
-  <div id="overlay" class="w-full h-full absolute bg-gray bg-opacity-50 hidden">
-    <div class="lds-ellipsis">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
+<div id="overlay" class="w-full h-full absolute bg-gray bg-opacity-50 hidden">
+  <div class="lds-ellipsis">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
   </div>
-  <div class="container mx-auto py-14 px-8">
-    <div class="flex items-center mb-4">
-      <a class="underline mr-1" href="/">Home</a>
-      <span class="mr-1">></span>
-      <span class="underline mr-1">Projects</span>
-      <span class="mr-1">></span>
-      <span class="underline mr-1">{{project.id}}</span>
+</div>
+<div class="container pt-14 px-8">
+  <div class="flex items-center mb-4">
+    <a class="underline mr-1" href="/">Home</a>
+    <span class="mr-1">></span>
+    <span class="underline mr-1">Projects</span>
+    <span class="mr-1">></span>
+    <span class="underline mr-1">{{project.id}}</span>
 
-    </div>
+  </div>
 
-    <div class="grid grid-cols-12 gap-4">
-      <div class="col-span-12 flex items-start content-start">
-        {{--  <a class="py-4 px-5 bg-secondary text-white rounded font-semibold hover:bg-opacity-95 mr-2" href="/">
+  <div class="grid grid-cols-12 gap-4">
+    <div class="col-span-12 flex items-start content-start">
+      {{--  <a class="py-4 px-5 bg-secondary text-white rounded font-semibold hover:bg-opacity-95 mr-2" href="/">
           <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
             <path fill="currentColor"
               d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z">
             </path>
           </svg>
         </a>  --}}
-        <div class="font-bold w-2/4 bg-white border rounded px-5 py-3">
-          {{project.name}}
-        </div>
-        <div class="ml-auto flex">
-          <button class="py-3 px-4 mr-2 bg-danger text-white rounded font-semibold hover:bg-opacity-95"
-            onclick="deleteProject({{project.id}})">
-            <svg class="w-4 h-4" viewBox="0 0 14 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M3.66683 3.00004V1.00004C3.66683 0.82323 3.73707 0.65366 3.86209 0.528636C3.98712 0.403612 4.15669 0.333374 4.3335 0.333374H9.66683C9.84364 0.333374 10.0132 0.403612 10.1382 0.528636C10.2633 0.65366 10.3335 0.82323 10.3335 1.00004V3.00004H13.6668V4.33337H12.3335V13C12.3335 13.1769 12.2633 13.3464 12.1382 13.4714C12.0132 13.5965 11.8436 13.6667 11.6668 13.6667H2.3335C2.15669 13.6667 1.98712 13.5965 1.86209 13.4714C1.73707 13.3464 1.66683 13.1769 1.66683 13V4.33337H0.333496V3.00004H3.66683ZM7.94283 8.33337L9.1215 7.15471L8.17883 6.21204L7.00016 7.39071L5.8215 6.21204L4.87883 7.15471L6.0575 8.33337L4.87883 9.51204L5.8215 10.4547L7.00016 9.27604L8.17883 10.4547L9.1215 9.51204L7.94283 8.33337ZM5.00016 1.66671V3.00004H9.00016V1.66671H5.00016Z" />
-            </svg>
-          </button>
-          @if(items)
-          {{--  <a class="flex items-center py-3 px-5 mr-2 bg-secondary text-white rounded secondary font-semibold hover:bg-opacity-95"
+      <div class="font-bold w-2/4 bg-white border rounded px-5 py-3">
+        {{project.name}}
+      </div>
+      <div class="ml-auto flex">
+        <button class="py-3 px-4 mr-2 bg-danger text-white rounded font-semibold hover:bg-opacity-95"
+          onclick="deleteProject({{project.id}})">
+          <svg class="w-4 h-4" viewBox="0 0 14 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M3.66683 3.00004V1.00004C3.66683 0.82323 3.73707 0.65366 3.86209 0.528636C3.98712 0.403612 4.15669 0.333374 4.3335 0.333374H9.66683C9.84364 0.333374 10.0132 0.403612 10.1382 0.528636C10.2633 0.65366 10.3335 0.82323 10.3335 1.00004V3.00004H13.6668V4.33337H12.3335V13C12.3335 13.1769 12.2633 13.3464 12.1382 13.4714C12.0132 13.5965 11.8436 13.6667 11.6668 13.6667H2.3335C2.15669 13.6667 1.98712 13.5965 1.86209 13.4714C1.73707 13.3464 1.66683 13.1769 1.66683 13V4.33337H0.333496V3.00004H3.66683ZM7.94283 8.33337L9.1215 7.15471L8.17883 6.21204L7.00016 7.39071L5.8215 6.21204L4.87883 7.15471L6.0575 8.33337L4.87883 9.51204L5.8215 10.4547L7.00016 9.27604L8.17883 10.4547L9.1215 9.51204L7.94283 8.33337ZM5.00016 1.66671V3.00004H9.00016V1.66671H5.00016Z" />
+          </svg>
+        </button>
+        @if(items)
+        {{--  <a class="flex items-center py-3 px-5 mr-2 bg-secondary text-white rounded secondary font-semibold hover:bg-opacity-95"
             href="metrics">
             <svg class="mr-2 w-4 h-4" viewBox="0 0 249 227" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -72,74 +61,73 @@
 
             Fetch Metrics
           </a>  --}}
-          <a class="py-3 px-5 bg-secondary text-white rounded secondary font-semibold hover:bg-opacity-95"
-            href="/projects/{{project.id}}/download">
-            Download Report
-          </a>
-          @end
-        </div>
-      </div>
-      <div class="col-span-12">
-        <table class="bg-white border border-gray w-full mb-4 ">
-          <thead>
-            <tr class="border-b border-gray">
-              <th class="border-r border-gray py-3 px-2 text-left font-medium">Bigram</th>
-              <th class="border-r border-gray py-3 px-2 text-leftfont-medium">Label</th>
-              <th class="border-r border-gray py-3 px-2 text-left font-medium">Frequency</th>
-              <th class="border-r border-gray py-3 px-2 text-left font-medium">Global frequency</th>
-              <th class="py-3 px-2 text-left font-medium">Google Ads metrics</th>
-            </tr>
-          </thead>
-          <tbody>
-            @if(items)
-            @each((item, index) in items)
-            <tr>
-              <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
-                class="py-2 px-5 border-r border-gray">
-                {{ item.ngram }}
-              </td>
-              <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
-                class="py-2 px-5 border-r border-gray">
-                <a href="{{item.link}}">{{ item.label }}</a>
-              </td>
-              <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
-                class="py-2 px-5 border-r border-gray">
-                {{ item.frequency }}
-              </td>
-              <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
-                class="py-2 px-5 border-r border-gray">
-                {{ item.global_frequency }}
-              </td>
-              <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
-                class="py-2 px-5">
-                @if(metrics[item.ngram])
-                @include('partials/diagram')
-                @end
-              </td>
-            </tr>
-            @end
-            @else
-            @each((item, index) in [5,3,4,3,5,3,4,3])
-            <tr>
-              <td class="py-2 px-5 border-r border-black {{index % 2 ? 'bg-body': ''}}">
-                <div class="flex">
-                  <div class="w-12 lg:w-{{item * 4 * 3}} h-4 bg-gray mr-4"></div>
-                  <div class="w-{{item * 4 * 2/4}} lg:w-{{item * 4 * 2}} h-4 bg-gray"></div>
-                </div>
-              </td>
-              <td class="py-2 px-5 {{index % 2 ? 'bg-body': ''}}">
-                <div class="w-8 h-4 bg-gray"></div>
-              </td>
-            </tr>
-            @end
-            @end
-          </tbody>
-        </table>
+        <a class="py-3 px-5 bg-secondary text-white rounded secondary font-semibold hover:bg-opacity-95"
+          href="/projects/{{project.id}}/download">
+          Download Report
+        </a>
+        @end
       </div>
     </div>
+    <div class="col-span-12">
+      <table class="bg-white border border-gray w-full mb-4 ">
+        <thead>
+          <tr class="border-b border-gray">
+            <th class="border-r border-gray py-3 px-2 text-left font-medium">Bigram</th>
+            <th class="border-r border-gray py-3 px-2 text-leftfont-medium">Label</th>
+            <th class="border-r border-gray py-3 px-2 text-left font-medium">Frequency</th>
+            <th class="border-r border-gray py-3 px-2 text-left font-medium">Global frequency</th>
+            <th class="py-3 px-2 text-left font-medium">Google Ads metrics</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if(items)
+          @each((item, index) in items)
+          <tr>
+            <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
+              class="py-2 px-5 border-r border-gray">
+              {{ item.ngram }}
+            </td>
+            <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
+              class="py-2 px-5 border-r border-gray">
+              <a href="{{item.link}}">{{ item.label }}</a>
+            </td>
+            <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
+              class="py-2 px-5 border-r border-gray">
+              {{ item.frequency }}
+            </td>
+            <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
+              class="py-2 px-5 border-r border-gray">
+              {{ item.global_frequency }}
+            </td>
+            <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})" class="py-2 px-5">
+              @if(metrics[item.ngram])
+              @include('partials/diagram')
+              @end
+            </td>
+          </tr>
+          @end
+          @else
+          @each((item, index) in [5,3,4,3,5,3,4,3])
+          <tr>
+            <td class="py-2 px-5 border-r border-black {{index % 2 ? 'bg-body': ''}}">
+              <div class="flex">
+                <div class="w-12 lg:w-{{item * 4 * 3}} h-4 bg-gray mr-4"></div>
+                <div class="w-{{item * 4 * 2/4}} lg:w-{{item * 4 * 2}} h-4 bg-gray"></div>
+              </div>
+            </td>
+            <td class="py-2 px-5 {{index % 2 ? 'bg-body': ''}}">
+              <div class="w-8 h-4 bg-gray"></div>
+            </td>
+          </tr>
+          @end
+          @end
+        </tbody>
+      </table>
+    </div>
   </div>
-  <script>
-    function deleteProject(id) {
+</div>
+<script>
+  function deleteProject(id) {
       document.getElementById('overlay').classList.toggle('hidden')
       return fetch(`/projects/${id}`, {method: 'DELETE'}).then(r => {
         window.location = '/'
@@ -159,7 +147,5 @@
       })
     })
 
-  </script>
-</body>
-
-</html>
+</script>
+@include('partials/footer')
