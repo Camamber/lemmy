@@ -24,7 +24,7 @@ RUN apk add --no-cache git
 WORKDIR /home/node
 # Download vendor libs
 RUN wget http://download.cdn.yandex.net/mystem/mystem-3.1-linux-64bit.tar.gz
-RUN tar -xzf mystem-3.1-linux-64bit.tar.gz -C ./mystem
+RUN mkdir mystem && tar -xzf mystem-3.1-linux-64bit.tar.gz -C ./mystem
 # Copy over package.json files
 COPY package*.json ./
 # Install only prod packages
