@@ -22,6 +22,9 @@ FROM node:14-alpine as installer
 RUN apk add --no-cache git
 # Set directory for all files
 WORKDIR /home/node
+# Download vendor libs
+RUN wget http://download.cdn.yandex.net/mystem/mystem-3.1-linux-64bit.tar.gz
+RUN tar -xzf mystem-3.1-linux-64bit.tar.gz -C ./mystem
 # Copy over package.json files
 COPY package*.json ./
 # Install only prod packages
@@ -36,9 +39,7 @@ ENV NODE_ENV=production
 ENV ENV_SILENT=true
 # Set app key at start time
 ENV APP_KEY=
-# Install deps required for this project
-WORKDIR /mystem
-RUN wget http://download.cdn.yandex.net/mystem/mystem-3.1-linux-64bit.tar.gz && tar -xzf mystem-3.1-linux-64bit.tar.gz
+
 # Use non-root user
 USER node
 # Make directory for app to live in
@@ -52,12 +53,11 @@ COPY --from=builder /home/node/build ./
 COPY --from=builder /home/node/.env ./
 # Copy over node_modules
 COPY --from=installer /home/node/node_modules ./
-
-RUN cp /mystem ./vendor/linux/x64/
-
+# Copy over vendor libs
+COPY --from=installer /home/node/mystem ./vendor/linux/x64/
 # Copy over package.json files
 COPY package*.json ./
 # Expose port 3333 to outside world
 EXPOSE 3333
 # Start server up
-CMD [ "node", "./build/server.js" ]
+CMD [ "npm", "start" ]
