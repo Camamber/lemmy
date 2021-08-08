@@ -100,8 +100,5 @@ export default class GoogleAdService {
 
     // Passing in a single entity to create
     await customer.keywordPlanAdGroupKeywords.create(keywordPlanKeyword).catch(console.error)
-    // for (const result of response.results) {
-    //   console.log('Created ad group keyword for keyword plan: ', result.resource_name)
-    // }
   }
 }

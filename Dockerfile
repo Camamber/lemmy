@@ -1,39 +1,63 @@
-FROM node:lts as build
-
-WORKDIR /mystem
-
-RUN wget http://download.cdn.yandex.net/mystem/mystem-3.1-linux-64bit.tar.gz && tar -xzf mystem-3.1-linux-64bit.tar.gz
-
-
-WORKDIR /app
-
+# Build AdonisJS
+FROM node:14-alpine as builder
+# Workaround for now, since bodyparser install relies on Git
+RUN apk add --no-cache git
+# Set directory for all files
+WORKDIR /home/node
+# Copy over package.json files
 COPY package*.json ./
-
+# Install all packages
 RUN npm install
-
+# Copy over source code
 COPY . .
+# Build AdonisJS for production
+RUN npm run build --production
 
-RUN npm run build
+
+# Install packages on different step,
+# since bodyparser install requires git
+# but runtime does not need it
+FROM node:14-alpine as installer
+# Workaround
+RUN apk add --no-cache git
+# Set directory for all files
+WORKDIR /home/node
+# Copy over package.json files
+COPY package*.json ./
+# Install only prod packages
+RUN npm ci --only=production
 
 
-FROM ubuntu:latest
+# Build final runtime container
+FROM node:14-alpine
+# Set environment variables
+ENV NODE_ENV=production
+# Disable .env file loading
+ENV ENV_SILENT=true
+# Set app key at start time
+ENV APP_KEY=
+# Install deps required for this project
+WORKDIR /mystem
+RUN wget http://download.cdn.yandex.net/mystem/mystem-3.1-linux-64bit.tar.gz && tar -xzf mystem-3.1-linux-64bit.tar.gz
+# Use non-root user
+USER node
+# Make directory for app to live in
+# It's important to set user first or owner will be root
+RUN mkdir -p /home/node/app/
+# Set working directory
+WORKDIR /home/node/app
+# Copy over required files from previous steps
+# Copy over built files
+COPY --from=builder /home/node/build ./
+COPY --from=builder /home/node/.env ./
+# Copy over node_modules
+COPY --from=installer /home/node/node_modules ./
 
-RUN apt-get upgrade && apt-get update  && apt-get install curl -y
-RUN curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
-RUN bash nodesource_setup.sh
-RUN apt-get install nodejs -y
+RUN cp /mystem ./vendor/linux/x64/
 
-WORKDIR /app
-
-COPY --from=build /app/build ./
-COPY --from=build /app/.env ./
-COPY --from=build /mystem ./vendor/linux/x64/
-
-RUN mkdir tmp
-
-RUN npm ci --production
-
-RUN npm install pino-pretty
-RUN node ace migration:run
-
-CMD ["npm", "start"]
+# Copy over package.json files
+COPY package*.json ./
+# Expose port 3333 to outside world
+EXPOSE 3333
+# Start server up
+CMD [ "node", "./build/server.js" ]

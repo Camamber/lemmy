@@ -3,7 +3,7 @@
     class="block w-full px-5 py-4 relative bg-white appearance-none border border-gray">
     <input type="file" name="sheet" id="sheet_upload" x-bind:class="file ? 'h-1' : 'h-full'"
       class="absolute inset-0 z-50 m-0 p-0 w-full  outline-none opacity-0 cursor-pointer"
-      x-on:change="file = $event.target.files[0]; console.log($event.target.files[0]);"
+      x-on:change="file = $event.target.files[0];"
       x-on:dragover="$el.classList.add('active')" x-on:dragleave="$el.classList.remove('active')"
       x-on:drop="$el.classList.remove('active')"
       accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">

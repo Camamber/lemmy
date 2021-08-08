@@ -53,7 +53,7 @@ export default class Project extends BaseModel {
       .from('semantics')
       .select('ngram', Database.raw('count(id) as c'))
       .where('project_id', this.id)
-      .groupBy('label_id', 'ngram')
+      .groupBy('ngram')
       .then((rows) =>
         rows.reduce((acc, v) => {
           acc[v.ngram] = v.c

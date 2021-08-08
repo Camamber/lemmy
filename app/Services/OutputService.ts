@@ -4,15 +4,15 @@ import xlsx from 'node-xlsx'
 import _ from 'lodash'
 
 const HEADER = [
+  'Ngram',
   'Label',
   'Link',
-  'Ngram',
   'Frequency',
   'Global frequency',
-  'Last Month Searches',
-  'Avg Searches Last 3 Month',
-  'Avg Searches Last 6 Month',
   'Avg Searches Last Year',
+  'Avg Searches Last 6 Month',
+  'Avg Searches Last 3 Month',
+  'Last Month Searches',
 ]
 export default class OutputService {
   public toCSV(frequency, metrics) {
@@ -22,15 +22,17 @@ export default class OutputService {
 
   public toExcel(frequency, metrics) {
     const data = this.rows(frequency, metrics)
-    return xlsx.build([{ name: 'sheet 1', data: data }])
+    return xlsx.build([{ name: 'sheet 1', data: data }], {
+      '!autofilter': [{ s: { c: 0, r: 0 }, e: { c: 0, r: 8 } }],
+    })
   }
 
   protected rows(frequency, metrics): any[] {
     const rows = [...frequency].map((item) => {
-      item['last_month_searches'] = 'n/a'
-      item['avg_monthly_searches_3'] = 'n/a'
-      item['avg_monthly_searches_6'] = 'n/a'
       item['avg_monthly_searches_12'] = 'n/a'
+      item['avg_monthly_searches_6'] = 'n/a'
+      item['avg_monthly_searches_3'] = 'n/a'
+      item['last_month_searches'] = 'n/a'
       const metric = metrics[item.ngram]
       if (metric && metric.keyword_metrics) {
         const monthlySearchVolumes = _.chain(metric.keyword_metrics.monthly_search_volumes)
