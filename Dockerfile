@@ -45,7 +45,7 @@ WORKDIR /home/node/app
 COPY --from=builder /home/node/build ./
 COPY --from=builder /home/node/.env ./
 # Copy over node_modules
-COPY --from=installer /home/node/node_modules ./
+COPY --from=installer /home/node/node_modules ./node_modules
 # Copy over vendor libs
 COPY --from=installer /home/node/mystem ./vendor/linux/x64/
 # Copy over package.json files
