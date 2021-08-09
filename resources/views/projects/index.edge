@@ -36,11 +36,11 @@
         @if(projects.length)
         @each((project, index) in projects)
         <tr>
-          <td class="py-2 px-2 border-r border-gray {{index % 2 ? 'bg-gray': ''}}">
+          <td class="py-2 px-2 border-r border-gray {{index % 2 ? 'bg-body': ''}}">
             {{ project.id }}
           </td>
 
-          <td class="py-2 px-2 border-r border-gray {{index % 2 ? 'bg-gray': ''}}">
+          <td class="py-2 px-2 border-r border-gray {{index % 2 ? 'bg-body': ''}}">
             <a href="/projects/{{project.id}}" class="flex items-center">
               {{ project.name }}
               @if(project.keywordPlan)
@@ -65,10 +65,10 @@
               @end
             </a>
           </td>
-          <td class="py-2 px-2 border-r border-gray {{index % 2 ? 'bg-gray': ''}}">
+          <td class="py-2 px-2 border-r border-gray {{index % 2 ? 'bg-body': ''}}">
             {{project.ngram}}
           </td>
-          <td class="py-2 px-2 border-r border-gray {{index % 2 ? 'bg-gray': ''}}">
+          <td class="py-2 px-2 border-r border-gray {{index % 2 ? 'bg-body': ''}}">
             <button class="py-1 px-1 mr-2 bg-danger text-white rounded font-semibold hover:bg-opacity-95"
               onclick="deleteProject({{project.id}})">
               <svg class="h-3" viewBox="0 0 14 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
