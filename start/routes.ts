@@ -20,10 +20,10 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', 'HomeController.index')
+Route.get('/', 'HomeController.index').as('home.index')
 Route.post('/', 'HomeController.store')
 
-Route.get('projects', 'ProjectsController.index')
-Route.get('projects/:id', 'ProjectsController.show')
+Route.get('projects', 'ProjectsController.index').as('projects.index')
+Route.get('projects/:id', 'ProjectsController.show').as('projects.show')
 Route.delete('projects/:id', 'ProjectsController.delete')
-Route.get('projects/:id/download', 'ProjectsController.download')
+Route.get('projects/:id/download', 'ProjectsController.download').as('projects.download')

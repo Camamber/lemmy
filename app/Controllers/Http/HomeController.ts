@@ -18,7 +18,7 @@ export default class HomeController {
   }
 
   public async index({ view }: HttpContextContract) {
-    return view.render('index')
+    return view.render('home')
   }
 
   public async store({ view, request, response }: HttpContextContract) {
@@ -27,7 +27,7 @@ export default class HomeController {
     const ngram: number = request.input('ngram', 2)
 
     if (!text && !sheet) {
-      return view.render('index')
+      return view.render('home')
     }
 
     console.time('parse input')
@@ -43,7 +43,7 @@ export default class HomeController {
     console.timeEnd('parse input')
 
     if (!lines.length) {
-      return view.render('index')
+      return view.render('home')
     }
 
     const project = new Project()
@@ -90,7 +90,7 @@ export default class HomeController {
     } else {
       const items = this.semanticService.calculateFrequency(rows)
       console.timeEnd(project.name)
-      return view.render('index', { items, text })
+      return view.render('home', { items, text })
     }
   }
 }

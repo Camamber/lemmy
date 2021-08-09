@@ -1,4 +1,5 @@
-@include('partials/header')
+@layout('layouts/main')
+@section('body')
 <div id="overlay" class="w-full h-full absolute bg-gray bg-opacity-50 hidden">
   <div class="lds-ellipsis">
     <div></div>
@@ -7,24 +8,30 @@
     <div></div>
   </div>
 </div>
-<div class="container pt-14 px-8">
+<div class="container pt-10 px-8">
   <div class="flex items-center mb-4">
     <a class="underline mr-1" href="/">Home</a>
     <span class="mr-1">></span>
     <span class="underline mr-1">Projects</span>
   </div>
-  <div class="col-span-12">
+  <div class="col-span-12 relative">
+    <div class="w-full h-full absolute bg-gradient-to-b from-transparent to-white flex items-center justify-center">
+      <p class="text-2xl font-semibold">
+        You have no projects yet.
+        <a href="/" class="underline text-secondary ml-1">Lemmy Go...</a>
+      </p>
+    </div>
     <table class="bg-white border border-gray w-full mb-4 ">
       <thead>
         <tr class="border-b border-gray">
           <th class="border-r border-gray py-3 px-2 text-left font-medium w-4">Id</th>
-          <th class="border-r border-gray py-3 px-2 text-leftfont-medium text-left">Project</th>
-          <th class="border-r border-gray py-3 px-2 text-leftfont-medium w-4">Ngram</th>
-          <th class="border-r border-gray py-3 px-2 text-leftfont-medium w-4 "></th>
+          <th class="border-r border-gray py-3 px-2 text-left font-medium">Project</th>
+          <th class="border-r border-gray py-3 px-2 text-left font-medium w-4">Ngram</th>
+          <th class="border-r border-gray py-3 px-2 text-left font-medium w-4 "></th>
         </tr>
       </thead>
       <tbody>
-        @if(projects)
+        @if(projects.length)
         @each((project, index) in projects)
         <tr>
           <td class="py-2 px-2 border-r border-gray {{index % 2 ? 'bg-gray': ''}}">
@@ -74,14 +81,20 @@
         @else
         @each((item, index) in [5,3,4,3,5,3,4,3])
         <tr>
-          <td class="py-2 px-5 border-r border-black {{index % 2 ? 'bg-body': ''}}">
+          <td class="py-2 px-5 border-r border-gray {{index % 2 ? 'bg-body': ''}}">
+            <div class="w-8 h-4 bg-gray"></div>
+          </td>
+          <td class="py-2 px-5 border-r border-gray {{index % 2 ? 'bg-body': ''}}">
             <div class="flex">
               <div class="w-12 lg:w-{{item * 4 * 3}} h-4 bg-gray mr-4"></div>
               <div class="w-{{item * 4 * 2/4}} lg:w-{{item * 4 * 2}} h-4 bg-gray"></div>
             </div>
           </td>
-          <td class="py-2 px-5 {{index % 2 ? 'bg-body': ''}}">
+          <td class="py-2 px-5 border-r border-gray {{index % 2 ? 'bg-body': ''}}">
             <div class="w-8 h-4 bg-gray"></div>
+          </td>
+          <td class="py-2 px-5 {{index % 2 ? 'bg-body': ''}}">
+            <div class="w-4 h-4 bg-gray"></div>
           </td>
         </tr>
         @end
@@ -99,4 +112,4 @@
     })
   }
 </script>
-@include('partials/footer')
+@end

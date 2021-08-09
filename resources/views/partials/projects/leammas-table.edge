@@ -1,0 +1,54 @@
+<table class="bg-white border border-gray w-full mb-4">
+  <thead>
+    <tr class="border-b border-gray">
+      <th class="border-r border-gray py-3 px-2 text-left font-medium">Bigram</th>
+      <th class="border-r border-gray py-3 px-2 text-left font-medium">Label</th>
+      <th class="border-r border-gray py-3 px-2 text-left font-medium">Frequency</th>
+      <th class="border-r border-gray py-3 px-2 text-left font-medium">Global frequency</th>
+      <th class="py-3 px-2 text-left font-medium">Google Ads metrics</th>
+    </tr>
+  </thead>
+  <tbody>
+    @if(items)
+    @each((item, index) in items)
+    <tr>
+      <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
+        class="py-2 px-5 border-r border-gray">
+        {{ item.ngram }}
+      </td>
+      <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
+        class="py-2 px-5 border-r border-gray">
+        <a href="{{item.link}}">{{ item.label }}</a>
+      </td>
+      <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
+        class="py-2 px-5 border-r border-gray">
+        {{ item.frequency }}
+      </td>
+      <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})"
+        class="py-2 px-5 border-r border-gray">
+        {{ item.global_frequency }}
+      </td>
+      <td style="background-color: rgba({{colors[item.label]}}, {{index % 2 ? '0.23': '0.2'}})" class="py-2 px-5">
+        @if(metrics[item.ngram])
+        @include('partials/diagram')
+        @end
+      </td>
+    </tr>
+    @end
+    @else
+    @each((item, index) in [5,3,4,3,5,3,4,3])
+    <tr>
+      <td class="py-2 px-5 border-r border-black {{index % 2 ? 'bg-body': ''}}">
+        <div class="flex">
+          <div class="w-12 lg:w-{{item * 4 * 3}} h-4 bg-gray mr-4"></div>
+          <div class="w-{{item * 4 * 2/4}} lg:w-{{item * 4 * 2}} h-4 bg-gray"></div>
+        </div>
+      </td>
+      <td class="py-2 px-5 {{index % 2 ? 'bg-body': ''}}">
+        <div class="w-8 h-4 bg-gray"></div>
+      </td>
+    </tr>
+    @end
+    @end
+  </tbody>
+</table>

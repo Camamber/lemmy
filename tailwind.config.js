@@ -1,5 +1,6 @@
+const idDev = process.env.npm_lifecycle_event === 'dev'
 module.exports = {
-  mode: 'jit',
+  mode: !idDev ? 'jit' : null,
   purge: ['./resources/views/**/*.edge', './resources/assets/ts/**/*.ts'],
   darkMode: false, // or 'media' or 'class'
   theme: {

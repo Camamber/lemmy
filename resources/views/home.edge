@@ -1,6 +1,6 @@
-@include('partials/header')
-
-<div class="container pt-14 px-8">
+@layout('layouts/main')
+@section('body')
+<div class="container pt-10 px-8">
   <div class="grid grid-cols-12 gap-4">
     <div class="col-span-12 lg:col-span-5">
       <form method="post" enctype="multipart/form-data">
@@ -16,8 +16,15 @@
         <div class="mb-4">
           @include('partials/drag-n-drop')
         </div>
-        <input type="Submit" value="Lemmy Go"
-          class="py-3 px-5 bg-secondary text-white rounded font-semibold cursor-pointer hover:bg-opacity-95">
+        <div class="flex">
+          <input type="Submit" value="Lemmy Go"
+            class="py-3 px-5 bg-secondary text-white rounded font-semibold cursor-pointer hover:bg-opacity-95">
+
+          <a href="{{ route('projects.index') }}" class="ml-2 py-3 px-5 bg-gray rounded hover:bg-opacity-95">
+            To projects
+          </a>
+
+        </div>
       </form>
     </div>
     <div class="col-span-12 mt-4 lg:mt-0 lg:col-start-7 lg:col-span-6">
@@ -56,6 +63,5 @@
     </div>
   </div>
 </div>
+@end
 {{-- lg:w-60 lg:w-36 lg:w-48 lg:w-32 lg:w-24 lg:w-40  --}}
-
-@include('partials/footer')
