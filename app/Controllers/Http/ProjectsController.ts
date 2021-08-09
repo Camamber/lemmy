@@ -15,6 +15,11 @@ export default class ProjectsController {
     this.outputService = new OutputService()
   }
 
+  public async index({ view }: HttpContextContract) {
+    const projects = await Project.query().orderBy('id', 'asc')
+    return view.render('projects/index', { projects })
+  }
+
   public async show({ params, view, response }: HttpContextContract) {
     const { id } = params
 
