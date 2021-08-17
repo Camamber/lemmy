@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Semantic extends BaseModel {
   @column({ isPrimary: true })
@@ -28,4 +28,14 @@ export default class Semantic extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @computed()
+  public get domain() {
+    if (this.link) {
+      const re = /^((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+)[\w\-\._~:\/?#[\]@!\$&'\(\)\*\+,;=.]+$/
+      const matches = this.link.match(re)
+      return matches ? matches[1] : ''
+    }
+    return ''
+  }
 }

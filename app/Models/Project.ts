@@ -1,7 +1,16 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  column,
+  computed,
+  HasMany,
+  hasMany,
+  HasOne,
+  hasOne,
+} from '@ioc:Adonis/Lucid/Orm'
 import Database from '@ioc:Adonis/Lucid/Database'
 import HistoricalMetric from './HistoricalMetric'
+import Semantic from './Semantic'
 
 export default class Project extends BaseModel {
   @column({ isPrimary: true })
@@ -22,7 +31,10 @@ export default class Project extends BaseModel {
   @column()
   public metrics: boolean
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({
+    autoCreate: true,
+    serialize: (value) => value.toFormat('yyyy-MM-dd HH:mm:ss'),
+  })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
@@ -32,6 +44,22 @@ export default class Project extends BaseModel {
     foreignKey: 'project_id',
   })
   public historicalMetrics: HasOne<typeof HistoricalMetric>
+
+  @hasMany(() => Semantic, {
+    foreignKey: 'project_id',
+  })
+  public semantics: HasMany<typeof Semantic>
+
+  @hasOne(() => Semantic, {
+    foreignKey: 'project_id',
+  })
+  public semantic_link: HasOne<typeof Semantic>
+
+  @computed()
+  public get domain() {
+    if (this.semantic_link) return this.semantic_link.domain
+    else return ''
+  }
 
   public async getFrequency() {
     const frequency = await Database.query()
