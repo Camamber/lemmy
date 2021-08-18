@@ -20,7 +20,7 @@ export default class ProjectsController {
       .preload('semantics', (query) => {
         query.select('project_id').max('link', 'link').groupBy('project_id')
       })
-      .orderBy('id', 'asc')
+      .orderBy('id', 'desc')
 
     return view.render('projects/index', { projects: projects.map((p) => p.toJSON()) })
   }
