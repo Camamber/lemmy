@@ -33,7 +33,7 @@ export default class Project extends BaseModel {
 
   @column.dateTime({
     autoCreate: true,
-    serialize: (value) => value.toFormat('yyyy-MM-dd HH:mm:ss'),
+    serialize: (value) => value.toFormat('yyyy-MM-dd HH:mm'),
   })
   public createdAt: DateTime
 
@@ -50,14 +50,9 @@ export default class Project extends BaseModel {
   })
   public semantics: HasMany<typeof Semantic>
 
-  @hasOne(() => Semantic, {
-    foreignKey: 'project_id',
-  })
-  public semantic_link: HasOne<typeof Semantic>
-
   @computed()
   public get domain() {
-    if (this.semantic_link) return this.semantic_link.domain
+    if (this.semantics.length) return this.semantics[0].domain
     else return ''
   }
 

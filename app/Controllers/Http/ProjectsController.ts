@@ -16,7 +16,11 @@ export default class ProjectsController {
   }
 
   public async index({ view }: HttpContextContract) {
-    const projects = await Project.query().preload('semantic_link').orderBy('id', 'asc')
+    const projects = await Project.query()
+      .preload('semantics', (query) => {
+        query.select('project_id').max('link', 'link').groupBy('project_id')
+      })
+      .orderBy('id', 'asc')
 
     return view.render('projects/index', { projects: projects.map((p) => p.toJSON()) })
   }
